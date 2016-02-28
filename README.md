@@ -7,6 +7,13 @@ See requirements.org (plain-text) for a description of the project.
 
 Make a shared state AJAX drawing program
 
+Sources
+=======
+
+http://flask.pocoo.org/docs/0.10/quickstart/# 2016-02-27
+http://flask.pocoo.org/docs/0.10/quickstart/#about-responses 2016-02-27
+http://stackoverflow.com/questions/12435297/how-do-i-jsonify-a-list-in-flask 2016-02-27
+
 Contributors / Licensing
 ========================
 

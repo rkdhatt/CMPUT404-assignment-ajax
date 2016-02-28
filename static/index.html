@@ -41,7 +41,11 @@ function sendJSONXMLHTTPRequest(method, url, objects, callback) {
                     //XXX: parse some JSON from the request!
                     var json_obj = JSON.parse(xhr.responseText);
                     //XXX: Pass the data to the callback!
-                    return callback(json_obj);
+                    // make sure callback is not null.
+                    if (callback != null)
+                    {
+                        return callback(json_obj);
+                    }
                 }
             } 
             catch(e) {
@@ -142,9 +146,10 @@ function getPosition(e) {
 
 function addEntity(entity, data) {
     world[entity] = data;
-    drawNextFrame(); // (but should we?)
+    //drawNextFrame(); // (but should we?)
     //XXX: Send a XHTML Request that updates the entity you just  modified! Therefore use POST instead of PUT because the entity must exist.
-    sendJSONXMLHTTPRequest("POST", "/entity/" + entity, world[entity], null);
+    // Callback should not be null, drawNextFrame should be called after parsing response.
+    sendJSONXMLHTTPRequest('POST', '/entity/' + entity, world[entity], drawNextFrame);
 
 
 }
@@ -270,7 +275,7 @@ mouse.mousedraggers.push(function(x,y,clicked,e) {
 
 function update() {
     //XXX: TODO Get the world from the webservice using a XMLHTTPRequest
-    JSONXMLHTTPRequest('GET','/world',null,function setWorld(updatedWorld){
+    sendJSONXMLHTTPRequest('GET','/world',null,function setWorld(updatedWorld){
         // update the world, then draw the frame.
         world = updatedWorld;
         drawFrame();

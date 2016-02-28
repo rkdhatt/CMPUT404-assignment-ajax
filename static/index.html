@@ -66,17 +66,52 @@ function sendJSONXMLHTTPRequest(method, url, objects, callback) {
 world = {};
 
 //XXX: TODO Make this prettier!
-function drawCircle(context,entity) {
+// Made the circle into a square instead.
+function drawSquare(context,entity) {
     with(context) {
         beginPath();              
-        lineWidth = 3;
+        lineWidth = 10;
+        shadowBlur = 10;
+        shadowColor = entity["colour"];
+        lineJoin = lineCap = 'round';
         var x = entity["x"];
         var y = entity["y"];
-        //moveTo(x,y);
         fillStyle = entity["colour"];
         strokeStyle = fillStyle;
-        arc(x, y, (entity["radius"])?entity["radius"]:50, 0, 2.0 * Math.PI, false);  
+        globalAlpha = 1;
+        rect(x-100, y-100, 100, 100); 
         stroke();                                
+    }
+}
+
+// Works when dragging mouse
+function drawRandomCircleRadiusOpacity(context, entity) {
+     with(context) {
+        var x = entity["x"];
+        var y = entity["y"];
+        beginPath();
+        lineWidth = 1;
+        shadowBlur = 0;
+        shadowColor = entity["colour"];
+        lineJoin = lineCap = 'round';
+        fillStyle = entity["colour"];
+        strokeStyle = entity["colour"];
+        globalAlpha = entity["opacity"];
+        var random_size = getRandomInt(10, 25);
+        arc(x, y, (entity["radius"])?entity["radius"]:50, 0, 2.0 * Math.PI, false); 
+        fill();
+        stroke();                         
+    }
+}
+
+function drawShape(context, entity) {
+    if (entity['type'] === 'circle')
+    {
+        drawRandomCircleRadiusOpacity(context, entity);
+    }
+    else
+    {
+        drawSquare(context, entity);
     }
 }
 
@@ -104,7 +139,7 @@ function renderFrame() {
     clearFrame();
     for (var key in world) {
         var entity = world[key];
-        drawCircle(context,prepEntity(entity));
+        drawShape(context,prepEntity(entity));
     }
 }
 
@@ -260,18 +295,20 @@ mouse = (function() {
 // Add the application specific mouse listeners!
 //XXX: TODO Make these prettier!
 mouse.mousedowners.push(function(x,y,clicked,e) {
-    addEntityWithoutName({'x':x,'y':y,'colour':'blue'});
+    addEntityWithoutName({'x':x,'y':y,'colour':'#008080','type':'square'}); // teal blue
 });
 
 mouse.mouseuppers.push(function(x,y,clicked,e) {
-    addEntityWithoutName({'x':x,'y':y,'colour':'red'});
+    addEntityWithoutName({'x':x,'y':y,'colour':'orange','type':'square'});
 });
 
 mouse.mousedraggers.push(function(x,y,clicked,e) {
-    addEntityWithoutName({'x':x,'y':y,'colour':'green',
-                          'radius':10});
+    addEntityWithoutName({'x':x,'y':y,'colour':'red','type':'circle','opacity':Math.random(),'radius':getRandomInt(5, 20)});
 });
 
+function getRandomInt(min, max){
+    return Math.floor(Math.random() * (max-min+1)) + min;
+}
 
 function update() {
     //XXX: TODO Get the world from the webservice using a XMLHTTPRequest

@@ -23,6 +23,6 @@ http://stackoverflow.com/questions/1527803/generating-random-numbers-in-javascri
 Contributors / Licensing
 ========================
 
-Generally everything is LICENSE'D under the Apache 2 license by Abram Hindle and Raman Dhatt.
+Generally everything is LICENSE'D under the Apache 2 license by Abram Hindle and modified by Raman Dhatt.
 
 
